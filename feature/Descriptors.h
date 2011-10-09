@@ -1,0 +1,23 @@
+#include <opencv2/features2d/features2d.hpp>
+
+#ifndef DESCRIPTORS_H
+#define DESCRIPTORS_H
+
+class Descriptors{
+    private:
+        cv::Ptr<cv::DescriptorExtractor> extractor;
+        cv::Mat descriptors;
+
+    public:
+        Descriptors();
+        Descriptors(const cv::Mat&, std::vector<cv::KeyPoint>, const char*);
+        ~Descriptors();
+
+        void setDescriptors(const cv::Mat&, 
+                            std::vector<cv::KeyPoint>, 
+                            const char*);
+
+        cv::Mat getDescriptors();
+};
+
+#endif //DESCRIPTORS_H
