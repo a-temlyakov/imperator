@@ -1,3 +1,6 @@
+#ifndef COLORHISTOGRAM_H
+#define COLORHISTOGRAM_H
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -24,3 +27,5 @@ class ColorHistogram{
         cv::Mat equalize(const cv::Mat&);
 
 };
+#endif //COLORHISTOGRAM_H
+

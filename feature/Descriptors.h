@@ -1,7 +1,7 @@
-#include <opencv2/features2d/features2d.hpp>
-
 #ifndef DESCRIPTORS_H
 #define DESCRIPTORS_H
+
+#include <opencv2/features2d/features2d.hpp>
 
 class Descriptors{
     private:

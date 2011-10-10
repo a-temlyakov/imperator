@@ -1,8 +1,8 @@
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/features2d/features2d.hpp>
-
 #ifndef KEYPOINTS_H
 #define KEYPOINTS_H
+
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/features2d/features2d.hpp>
 
 class Keypoints{
     private:

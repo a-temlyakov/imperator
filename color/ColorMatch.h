@@ -1,3 +1,6 @@
+#ifndef COLORMATCH_H
+#define COLORMATCH_H
+
 #include "ColorHistogram.h"
 
 class ColorMatch{
@@ -16,3 +19,5 @@ class ColorMatch{
         void setReferenceImage(const cv::Mat&);
         double compare(const cv::Mat&);
 };
+#endif //COLORMATCH_H
+
