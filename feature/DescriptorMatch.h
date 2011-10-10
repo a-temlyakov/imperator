@@ -1,9 +1,9 @@
+#ifndef DESCRIPTORMATCH_H
+#define DESCRIPTORMATCH_H
+
 #include <opencv2/features2d/features2d.hpp>
 #include "Keypoints.h"
 #include "Descriptors.h"
-
-#ifndef DESCRIPTORMATCH_H
-#define DESCRIPTORMATCH_H
 
 class DescriptorMatch{
     private:
