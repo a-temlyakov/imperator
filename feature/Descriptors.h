@@ -18,6 +18,8 @@ class Descriptors{
                             const char*);
 
         cv::Mat getDescriptors();
+        int getDescriptorSize();
+        int getDescriptorType();
 };
-
 #endif //DESCRIPTORS_H
+

@@ -31,3 +31,13 @@ cv::Mat Descriptors::getDescriptors()
     return descriptors;
 }
 
+int Descriptors::getDescriptorSize()
+{
+    return extractor->descriptorSize();
+}   
+
+int Descriptors::getDescriptorType()
+{
+    return extractor->descriptorType();
+}
+
