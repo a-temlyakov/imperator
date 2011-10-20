@@ -13,12 +13,14 @@ class BagOfWords{
 
         Ptr<FeatureDetector> featureDetector;
         Ptr<DescriptorExtractor> descExtractor;
-        
+        Ptr<DescriptorMatcher> descMatcher;
+        Ptr<BOWImgDescriptorExtractor> bowExtractor;
+
         int dictionary_size_; //number of features per image 
     
         Mat descriptors_;
         Mat vocabulary_;
-        Mat training_data_; 
+        //Mat training_data_; 
 
     public:
         BagOfWords();
@@ -27,7 +29,7 @@ class BagOfWords{
         //Default functions using pre-set parameters
         Mat computeDescriptors(vector<Mat>); 
         Mat computeVocabulary();
-        Mat computeTrainingData(vector<Mat>);
+        Mat computeCodewords(vector<Mat>);
         
         //to-do: add getters and setters
         //void setDescriptors();
