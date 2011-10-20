@@ -5,9 +5,9 @@ CCFLAGS = -Wall `pkg-config --cflags opencv` `pkg-config --libs opencv`
 
 all: ${proj} 
 
-${proj}: ${proj}.o color/ColorMatch.o color/ColorHistogram.o feature/DescriptorMatch.o feature/Keypoints.o feature/Descriptors.o
+${proj}: ${proj}.o color/ColorMatch.o color/ColorHistogram.o feature/DescriptorMatch.o feature/Keypoints.o feature/Descriptors.o training/BagOfWords.o
  
-	${CXX} ${CCFLAGS} -o ${proj}  ${proj}.o color/ColorMatch.o color/ColorHistogram.o feature/DescriptorMatch.o feature/Keypoints.o feature/Descriptors.o
+	${CXX} ${CCFLAGS} -o ${proj}  ${proj}.o color/ColorMatch.o color/ColorHistogram.o feature/DescriptorMatch.o feature/Keypoints.o feature/Descriptors.o training/BagOfWords.o
 
 ${proj}.o: ${proj}.cpp 
 	${CXX} ${CCFLAGS} -c ${proj}.cpp
@@ -26,6 +26,9 @@ $Keypoints.o: feature/Keypoints.cpp
 
 $Descriptors.o: feature/Descriptors.cpp
 	${CXX} ${CCFLAGS} -c feature/Descriptors.cpp
+
+$BagOfWords.o: training/BagOfWords.cpp
+	${CXX} ${CCFLAGS} -c training/BagOfWOrds.cpp
 
 clean:
 	-rm *.o color/*.o feature/*.o ${proj} 
