@@ -31,4 +31,4 @@ $BagOfWords.o: training/BagOfWords.cpp
 	${CXX} ${CCFLAGS} -c training/BagOfWOrds.cpp
 
 clean:
-	-rm *.o color/*.o feature/*.o ${proj} 
+	-rm *.o color/*.o feature/*.o training/*.o ${proj} 
