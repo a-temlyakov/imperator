@@ -1,11 +1,12 @@
 #include "BagOfWords.h"
+#include <iostream>
 
 BagOfWords::BagOfWords()
 {
-    dictionary_size_ = 100;
+    dictionary_size_ = 5;
 
-    featureDetector = FeatureDetector::create("FAST");
-    descExtractor = DescriptorExtractor::create("SURF");
+    featureDetector = FeatureDetector::create("SIFT");
+    descExtractor = DescriptorExtractor::create("OpponentSIFT");
     descMatcher = DescriptorMatcher::create("BruteForce");
     bowExtractor = new BOWImgDescriptorExtractor(descExtractor, descMatcher);
 
@@ -27,8 +28,13 @@ Mat BagOfWords::computeDescriptors(vector<Mat> training_data)
     for(unsigned int i = 0; i < training_data.size(); i++)
     {
         featureDetector->detect(training_data.at(i), keypoints);
+
+        if(keypoints.size() == 0)
+        {   //no keypoints found
+            continue;
+        }
+
         descExtractor->compute(training_data.at(i), keypoints, descriptor);
-    
         descriptors_.push_back(descriptor);
     }
 
@@ -41,11 +47,15 @@ Mat BagOfWords::computeVocabulary()
     {
         //to-do: throw error
     }
-
-    BOWKMeansTrainer bowtrainer(dictionary_size_);
-    bowtrainer.add(descriptors_);
     
+    TermCriteria tc(CV_TERMCRIT_ITER, 100, 0.0001);
+    int retries = 5;
+    int flags = KMEANS_PP_CENTERS;
+
+    BOWKMeansTrainer bowtrainer(dictionary_size_, tc, retries, flags);
+    bowtrainer.add(descriptors_);
     vocabulary_ = bowtrainer.cluster();
+    
     bowExtractor->setVocabulary(vocabulary_);
 
     return vocabulary_;
