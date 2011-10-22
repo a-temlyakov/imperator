@@ -3,14 +3,14 @@
 
 BagOfWords::BagOfWords()
 {
-    dictionary_size_ = 5;
+    dictionary_size_ = 25;
 
     featureDetector = FeatureDetector::create("SIFT");
     descExtractor = DescriptorExtractor::create("OpponentSIFT");
     descMatcher = DescriptorMatcher::create("BruteForce");
     bowExtractor = new BOWImgDescriptorExtractor(descExtractor, descMatcher);
 
-    descriptors_.create(1,
+    descriptors_.create(0,
                         descExtractor->descriptorSize(),
                         descExtractor->descriptorType());
 }
