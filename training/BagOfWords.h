@@ -20,21 +20,29 @@ class BagOfWords{
     
         Mat descriptors_;
         Mat vocabulary_;
-        //Mat training_data_; 
 
     public:
         BagOfWords();
+        BagOfWords(int, const char*, const char*, const char*);
         ~BagOfWords();
     
-        //Default functions using pre-set parameters
-        Mat computeDescriptors(vector<Mat>); 
-        Mat computeVocabulary();
+        //computers :)
+        //Descriptors and vocabulary are built during training phase
+        //Codewords are used during testing and training
+        int computeDescriptors(vector<Mat>); 
+        int computeVocabulary();
         Mat computeCodewords(vector<Mat>);
         
-        //to-do: add getters and setters
-        //void setDescriptors();
-        //void setVocabulary();
-        
+        //setters
+        void setDictionarySize(int);
+        void setFeatureDetector(const char*);
+        void setDescriptorExtractor(const char*);
+        void setDescriptorMatcher(const char*);
+
+        //getters
+        int getDictionarySize();
+        Mat getDescriptors();
+        Mat getVocabulary();
 };
 #endif //BAGOFWORDS_H
 
