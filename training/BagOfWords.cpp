@@ -125,7 +125,7 @@ int BagOfWords::computeVocabulary()
     return EXIT_SUCCESS;
 }
 
-Mat BagOfWords::computeCodewords(vector<Mat> data)
+int BagOfWords::computeCodewords(vector<Mat> data, Mat &codewords)
 {
     if(vocabulary_.empty())
     {
@@ -133,8 +133,9 @@ Mat BagOfWords::computeCodewords(vector<Mat> data)
         computeVocabulary();
     }
 
+    codewords.create(0, dictionary_size_, CV_32FC1);
+
     Mat response_hist;
-    Mat codewords(0, dictionary_size_, CV_32FC1);
     vector<KeyPoint> keypoints;
 
     for(unsigned int i = 0; i < data.size(); i++)
@@ -145,5 +146,5 @@ Mat BagOfWords::computeCodewords(vector<Mat> data)
         codewords.push_back(response_hist);
     }
 
-    return codewords;
+    return EXIT_SUCCESS;
 }

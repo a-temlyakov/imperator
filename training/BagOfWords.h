@@ -31,7 +31,7 @@ class BagOfWords{
         //Codewords are used during testing and training
         int computeDescriptors(vector<Mat>); 
         int computeVocabulary();
-        Mat computeCodewords(vector<Mat>);
+        int computeCodewords(vector<Mat>, Mat&);
         
         //setters
         void setDictionarySize(int);
