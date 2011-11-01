@@ -46,6 +46,17 @@ void BagOfWords::setDictionarySize(int dict_size)
     dictionary_size_ = dict_size;
 }
 
+void BagOfWords::setDescriptors(Mat descriptors)
+{
+    descriptors_ = descriptors;
+}
+
+void BagOfWords::setVocabulary(Mat vocabulary)
+{
+    vocabulary_ = vocabulary;
+    bowExtractor->setVocabulary(vocabulary_);
+}
+
 void BagOfWords::setFeatureDetector(const char* feature_name)
 {
     featureDetector = FeatureDetector::create(feature_name);
@@ -84,24 +95,62 @@ Mat BagOfWords::getVocabulary()
     return vocabulary_;
 }
 
-int BagOfWords::computeDescriptors(vector<Mat> training_data)
+void BagOfWords::saveDescriptors(string file_name)
 {
-    Mat descriptor;
+    FileStorage fs(file_name, FileStorage::WRITE);
+    fs << "training_descriptors" << descriptors_;
+    fs.release();
+}
+
+void BagOfWords::saveVocabulary(string file_name)
+{
+    FileStorage fs(file_name, FileStorage::WRITE);
+    fs << "training_vocabulary" << vocabulary_;
+    fs.release();
+}
+
+void BagOfWords::loadDescriptors(string file_name)
+{
+    FileStorage fs(file_name, FileStorage::READ);
+    fs["training_descriptors"] >> descriptors_;
+    fs.release();
+}
+
+void BagOfWords::loadVocabulary(string file_name)
+{
+    FileStorage fs(file_name, FileStorage::READ);
+    fs["training_vocabulary"] >> vocabulary_;
+    fs.release();
+
+    bowExtractor->setVocabulary(vocabulary_);
+}
+
+int BagOfWords::computeDescriptors(vector<string> file_list)
+{
+    Mat descriptor, image;
     vector<KeyPoint> keypoints;
 
-    for(unsigned int i = 0; i < training_data.size(); i++)
+    for(unsigned int i = 0; i < file_list.size(); i++)
     {
-        featureDetector->detect(training_data.at(i), keypoints);
-
-        if(keypoints.size() == 0)
-        {   //no keypoints found
+        //to-do: throw error if image is grayscale (one channel),
+        //       but descriptor is OpponentSIFT (or OpponentSURF)
+        cout << ".";
+        cout.flush();
+        
+        image = imread(file_list.at(i));
+        if(!image.data)
             continue;
-        }
+        
+        featureDetector->detect(image, keypoints);
 
-        descExtractor->compute(training_data.at(i), keypoints, descriptor);
+        if(keypoints.size() == 0) //no keypoints found
+            continue;
+        
+        descExtractor->compute(image, keypoints, descriptor);
         descriptors_.push_back(descriptor);
     }
-
+   
+    cout << "\n";
     return EXIT_SUCCESS;
 }
 
@@ -125,7 +174,7 @@ int BagOfWords::computeVocabulary()
     return EXIT_SUCCESS;
 }
 
-int BagOfWords::computeCodewords(vector<Mat> data, Mat &codewords)
+int BagOfWords::computeCodewords(vector<string> data, Mat &codewords)
 {
     if(vocabulary_.empty())
     {
@@ -135,13 +184,18 @@ int BagOfWords::computeCodewords(vector<Mat> data, Mat &codewords)
 
     codewords.create(0, dictionary_size_, CV_32FC1);
 
-    Mat response_hist;
+    Mat response_hist, image;
     vector<KeyPoint> keypoints;
 
     for(unsigned int i = 0; i < data.size(); i++)
     {
-        featureDetector->detect(data.at(i), keypoints);    
-        bowExtractor->compute(data.at(i), keypoints, response_hist);
+        image = imread(data.at(i));
+
+        if(!image.data)
+            continue;
+        
+        featureDetector->detect(image, keypoints);    
+        bowExtractor->compute(image, keypoints, response_hist);
 
         codewords.push_back(response_hist);
     }
