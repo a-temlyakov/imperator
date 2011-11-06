@@ -21,6 +21,7 @@ class BagOfWords{
     
         Mat descriptors_;
         Mat vocabulary_;
+        Mat codewords_;
 
     public:
         BagOfWords();
@@ -46,14 +47,17 @@ class BagOfWords{
         int getDictionarySize();
         Mat getDescriptors();
         Mat getVocabulary();
+        Mat getCodewords();
 
         //savers
         void saveDescriptors(string);
         void saveVocabulary(string);
-
+        void saveCodewords(string, string);
+    
         //loaders
         void loadDescriptors(string);
         void loadVocabulary(string);
+        void loadCodewords(string, string);
 };
 #endif //BAGOFWORDS_H
 

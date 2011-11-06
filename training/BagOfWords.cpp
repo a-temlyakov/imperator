@@ -95,6 +95,11 @@ Mat BagOfWords::getVocabulary()
     return vocabulary_;
 }
 
+Mat BagOfWords::getCodewords()
+{
+    return codewords_;
+}
+
 void BagOfWords::saveDescriptors(string file_name)
 {
     FileStorage fs(file_name, FileStorage::WRITE);
@@ -108,6 +113,13 @@ void BagOfWords::saveVocabulary(string file_name)
     fs << "training_vocabulary" << vocabulary_;
     fs.release();
 }
+
+void BagOfWords::saveCodewords(string file_name, string description)
+{
+    FileStorage fs(file_name, FileStorage::WRITE);
+    fs << description << codewords_;
+    fs.release();
+}    
 
 void BagOfWords::loadDescriptors(string file_name)
 {
@@ -123,6 +135,13 @@ void BagOfWords::loadVocabulary(string file_name)
     fs.release();
 
     bowExtractor->setVocabulary(vocabulary_);
+}
+
+void BagOfWords::loadCodewords(string file_name, string description)
+{
+    FileStorage fs(file_name, FileStorage::READ);
+    fs[description] >> codewords_;
+    fs.release();
 }
 
 int BagOfWords::computeDescriptors(vector<string> file_list)
@@ -200,5 +219,6 @@ int BagOfWords::computeCodewords(vector<string> data, Mat &codewords)
         codewords.push_back(response_hist);
     }
 
+    codewords_ = codewords;
     return EXIT_SUCCESS;
 }
