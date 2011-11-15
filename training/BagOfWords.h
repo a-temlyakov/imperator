@@ -50,14 +50,14 @@ class BagOfWords{
         Mat getCodewords();
 
         //savers
-        void saveDescriptors(string);
-        void saveVocabulary(string);
+        void saveDescriptors(string, string);
+        void saveVocabulary(string, string);
         void saveCodewords(string, string);
     
         //loaders
-        void loadDescriptors(string);
-        void loadVocabulary(string);
-        void loadCodewords(string, string);
+        void loadDescriptors(string, string);
+        void loadVocabulary(string, string);
+        static void loadCodewords(string, string, Mat&);
 };
 #endif //BAGOFWORDS_H
 

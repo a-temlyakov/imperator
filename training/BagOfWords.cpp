@@ -6,19 +6,21 @@ BagOfWords::BagOfWords()
     dictionary_size_ = 1000;
 
     featureDetector = FeatureDetector::create("SIFT");
-    descExtractor = DescriptorExtractor::create("OpponentSIFT");
+    descExtractor = DescriptorExtractor::create("SIFT");
     descMatcher = DescriptorMatcher::create("BruteForce");
     bowExtractor = new BOWImgDescriptorExtractor(descExtractor, descMatcher);
 
     descriptors_.create(0,
                         descExtractor->descriptorSize(),
                         descExtractor->descriptorType());
+
+    codewords_.create(0, dictionary_size_, CV_32FC1);
 }
 
 BagOfWords::BagOfWords(int dict_size,
-//As of 12/2010:
-// Features: FAST, STAR, SIFT, SURF, MSER, GFTT, HARRIS
-// Descriptors: SURF, OpponentSURF, SIFT, OpponentSIFT, BRIEF
+//As of 11/2011:
+// Features: FAST, STAR, SIFT, SURF, MSER, GFTT, HARRIS, ORB
+// Descriptors: SURF, OpponentSURF, SIFT, OpponentSIFT, BRIEF, ORB
 // Matchers: BruteForce, BruteForce-L1, FlannBased, BruteForce-Hamming,
 //           BruteForce-HammingLUT
                        const char* feature_name,
@@ -34,6 +36,8 @@ BagOfWords::BagOfWords(int dict_size,
     descriptors_.create(0,
                        descExtractor->descriptorSize(),
                        descExtractor->descriptorType());
+
+    codewords_.create(0, dictionary_size_, CV_32FC1);
 }
 
 BagOfWords::~BagOfWords()
@@ -100,17 +104,17 @@ Mat BagOfWords::getCodewords()
     return codewords_;
 }
 
-void BagOfWords::saveDescriptors(string file_name)
+void BagOfWords::saveDescriptors(string file_name, string description)
 {
     FileStorage fs(file_name, FileStorage::WRITE);
-    fs << "training_descriptors" << descriptors_;
+    fs << description << descriptors_;
     fs.release();
 }
 
-void BagOfWords::saveVocabulary(string file_name)
+void BagOfWords::saveVocabulary(string file_name, string description)
 {
     FileStorage fs(file_name, FileStorage::WRITE);
-    fs << "training_vocabulary" << vocabulary_;
+    fs << description << vocabulary_;
     fs.release();
 }
 
@@ -121,26 +125,28 @@ void BagOfWords::saveCodewords(string file_name, string description)
     fs.release();
 }    
 
-void BagOfWords::loadDescriptors(string file_name)
+void BagOfWords::loadDescriptors(string file_name, string description)
 {
     FileStorage fs(file_name, FileStorage::READ);
-    fs["training_descriptors"] >> descriptors_;
+    fs[description] >> descriptors_;
     fs.release();
 }
 
-void BagOfWords::loadVocabulary(string file_name)
+void BagOfWords::loadVocabulary(string file_name, string description)
 {
     FileStorage fs(file_name, FileStorage::READ);
-    fs["training_vocabulary"] >> vocabulary_;
+    fs[description] >> vocabulary_;
     fs.release();
 
     bowExtractor->setVocabulary(vocabulary_);
 }
 
-void BagOfWords::loadCodewords(string file_name, string description)
+void BagOfWords::loadCodewords(string file_name, 
+                               string description, 
+                               Mat &codewords)
 {
     FileStorage fs(file_name, FileStorage::READ);
-    fs[description] >> codewords_;
+    fs[description] >> codewords;
     fs.release();
 }
 
@@ -201,8 +207,6 @@ int BagOfWords::computeCodewords(vector<string> data, Mat &codewords)
         computeVocabulary();
     }
 
-    codewords.create(0, dictionary_size_, CV_32FC1);
-
     Mat response_hist, image;
     vector<KeyPoint> keypoints;
 
@@ -216,9 +220,8 @@ int BagOfWords::computeCodewords(vector<string> data, Mat &codewords)
         featureDetector->detect(image, keypoints);    
         bowExtractor->compute(image, keypoints, response_hist);
 
-        codewords.push_back(response_hist);
+        codewords_.push_back(response_hist);
     }
 
-    codewords_ = codewords;
     return EXIT_SUCCESS;
 }
