@@ -27,6 +27,14 @@ BagOfWords::BagOfWords(int dict_size,
                        const char* descriptor_name,
                        const char* matcher_name)
 {
+
+    //SIFT and SURF are float descriptors and use the non-Hamming matchers
+    //ORB and BRIEF are uchar descriptors and use the Hamming matchers
+    
+    //to-do: throw a gracious error when wrong combination of 
+    //       feature,descriptor,matcher is used
+    //       for example: ORB,ORB,BruteForce throws an ugly error atm
+
     dictionary_size_ = dict_size;
     featureDetector = FeatureDetector::create(feature_name);
     descExtractor = DescriptorExtractor::create(descriptor_name);
@@ -36,8 +44,6 @@ BagOfWords::BagOfWords(int dict_size,
     descriptors_.create(0,
                        descExtractor->descriptorSize(),
                        descExtractor->descriptorType());
-
-    codewords_.create(0, dictionary_size_, CV_32FC1);
 }
 
 BagOfWords::~BagOfWords()
@@ -159,10 +165,12 @@ int BagOfWords::computeDescriptors(vector<string> file_list)
     {
         //to-do: throw error if image is grayscale (one channel),
         //       but descriptor is OpponentSIFT (or OpponentSURF)
-        cout << ".";
+        //cout << file_list.at(i) << endl;
+        cout << '.';
         cout.flush();
-        
+
         image = imread(file_list.at(i));
+
         if(!image.data)
             continue;
         
@@ -170,7 +178,7 @@ int BagOfWords::computeDescriptors(vector<string> file_list)
 
         if(keypoints.size() == 0) //no keypoints found
             continue;
-        
+       
         descExtractor->compute(image, keypoints, descriptor);
         descriptors_.push_back(descriptor);
     }
@@ -193,7 +201,6 @@ int BagOfWords::computeVocabulary()
     BOWKMeansTrainer bowtrainer(dictionary_size_, tc, retries, flags);
     bowtrainer.add(descriptors_);
     vocabulary_ = bowtrainer.cluster();
-    
     bowExtractor->setVocabulary(vocabulary_);
 
     return EXIT_SUCCESS;
@@ -206,6 +213,8 @@ int BagOfWords::computeCodewords(vector<string> data, Mat &codewords)
         computeDescriptors(data);
         computeVocabulary();
     }
+
+    codewords.create(0, dictionary_size_, CV_32FC1);
 
     Mat response_hist, image;
     vector<KeyPoint> keypoints;
@@ -220,8 +229,10 @@ int BagOfWords::computeCodewords(vector<string> data, Mat &codewords)
         featureDetector->detect(image, keypoints);    
         bowExtractor->compute(image, keypoints, response_hist);
 
-        codewords_.push_back(response_hist);
+        codewords.push_back(response_hist);
     }
+
+    codewords_ = codewords;
 
     return EXIT_SUCCESS;
 }
