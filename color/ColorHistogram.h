@@ -15,16 +15,16 @@ class ColorHistogram{
 
     public:
         ColorHistogram();
-        ColorHistogram(int);
+        ColorHistogram(int num_bins);
         ~ColorHistogram();
 
         int getNumBins();
-        cv::MatND getHistogram(const cv::Mat&);
-        cv::SparseMat getSparseHistogram(const cv::Mat&);
+        cv::MatND getHistogram(const cv::Mat& image);
+        cv::SparseMat getSparseHistogram(const cv::Mat& image);
         
-        void setNumBins(int);
+        void setNumBins(int num_bins);
 
-        cv::Mat equalize(const cv::Mat&);
+        cv::Mat equalize(const cv::Mat& image);
 
 };
 #endif //COLORHISTOGRAM_H

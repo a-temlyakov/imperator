@@ -7,10 +7,10 @@
 
 class DescriptorMatch{
     private:
-        cv::Mat reference_image;
-        cv::Ptr<cv::DescriptorMatcher> matcher;
-        std::vector<cv::DMatch> matches;
-        Keypoints keypoints;
+        Mat reference_image;
+        Ptr<cv::DescriptorMatcher> matcher;
+        vector<cv::DMatch> matches;
+        Keypoints kp_;
         Descriptors descriptors;
         const char* matcher_type;
         const char* keypoint_type;
@@ -18,24 +18,26 @@ class DescriptorMatch{
 
     public:
         DescriptorMatch();
-        DescriptorMatch(cv::Mat&, const char*, const char*, const char*);
+        DescriptorMatch(Mat& image, 
+                        const char* k_type, 
+                        const char* d_type, 
+                        const char* m_type);
         ~DescriptorMatch();
 
-        void setReferenceImage(cv::Mat&);
-        void setMatcher(const char*);
-        void setKeypoints(const char*);
-        void setDescriptors(const char*);
+        void setReferenceImage(Mat& image);
+        void setMatcher(const char* m_type);
+        void setDescriptors(const char* d_type);
         
-        cv::Mat getReferenceImage();
-        std::vector<cv::KeyPoint> getKeypoints();
-        cv::Mat getDescriptors();
-        std::vector<cv::DMatch> getMatches();
+        Mat getReferenceImage();
+        void getKeypoints(vector<KeyPoint> keypoints);
+        Mat getDescriptors();
+        vector<cv::DMatch> getMatches();
 
-        void setMatches(cv::Mat&);
+        void setMatches(Mat& target_image);
 
-        void displayMatches(cv::Mat&);
+        void displayMatches(Mat& target_image);
         void displayKeypoints();
         
 };
-
 #endif //DESCRIPTORMATCH_H
+

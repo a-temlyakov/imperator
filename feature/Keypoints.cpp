@@ -5,16 +5,11 @@ Keypoints::Keypoints()
     
 }
 
-Keypoints::Keypoints(const cv::Mat& img)
+Keypoints::Keypoints(const Mat& image, const char* feature_name)
 {
-    image = img.clone();
-}
-
-Keypoints::Keypoints(const cv::Mat& img, const char* feature)
-{
-    image = img.clone();
-    detector = cv::FeatureDetector::create(feature);
-    detector->detect(image, keypoints);
+    image_ = image;
+    detector_ = FeatureDetector::create(feature_name);
+    detector_->detect(image, keypoints_);
 }
 
 Keypoints::~Keypoints()
@@ -22,42 +17,41 @@ Keypoints::~Keypoints()
 
 }
 
-void Keypoints::setImage(const cv::Mat& img)
+void Keypoints::setDetector(const char* feature_name)
 {
-    image = img.clone();
+    detector_ = FeatureDetector::create(feature_name);
 }
 
-void Keypoints::setKeypoints(const char* feature)
+void Keypoints::detect(Mat& image, 
+                       vector<KeyPoint>& keypoints, 
+                       const char* feature_name)
 {
-    detector = cv::FeatureDetector::create(feature);
-    detector->detect(image, keypoints);
+    image_ = image;
+    detector_ = FeatureDetector::create(feature_name);
+    detector_->detect(image, keypoints_);
+    keypoints = keypoints_;
 }
 
-cv::Mat Keypoints::getImage()
+void Keypoints::getKeypoints(vector<KeyPoint>& keypoints)
 {
-    return image;
-}
-
-std::vector<cv::KeyPoint> Keypoints::getKeypoints()
-{
-    return keypoints;
+    keypoints = keypoints_;
 }
 
 int Keypoints::size()
 {
-    return keypoints.size();
+    return keypoints_.size();
 }
 
 void Keypoints::displayKeypoints()
 {
-    cv::Mat keypoints_image;
-    cv::drawKeypoints(image,
-                      keypoints,
+    Mat keypoints_image;
+    drawKeypoints(image_,
+                      keypoints_,
                       keypoints_image,
-                      cv::Scalar(0,0,255),
-                      cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+                      Scalar(0,0,255),
+                      DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
-    cv::namedWindow("Image Keypoints");
-    cv::imshow("Image Keypoints", keypoints_image);
-    cv::waitKey(0);
+    namedWindow("Image Keypoints");
+    imshow("Image Keypoints", keypoints_image);
+    waitKey(0);
 }

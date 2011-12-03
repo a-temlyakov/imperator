@@ -13,11 +13,11 @@ class ColorMatch{
 
     public:
         ColorMatch();
-        ColorMatch(int);
+        ColorMatch(int num_bins);
         ~ColorMatch();
 
-        void setReferenceImage(const cv::Mat&);
-        double compare(const cv::Mat&);
+        void setReferenceImage(const cv::Mat& image);
+        double compare(const cv::Mat& target_image);
 };
 #endif //COLORMATCH_H
 
