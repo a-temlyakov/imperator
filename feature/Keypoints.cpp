@@ -19,10 +19,21 @@ Keypoints::~Keypoints()
 
 const vector<KeyPoint>& Keypoints::computeKeypoints(const char* feature_name)
 {
+    if(image_.empty())
+    {
+        std::cout << "Warning: Image is EMPTY\n";
+        std::cout << "No keypoints found!" << std::endl;
+    }
+
     detector_ = FeatureDetector::create(feature_name);
     detector_->detect(image_, keypoints_);
 
     return keypoints_;
+}
+
+void Keypoints::setImage(const Mat& image)
+{
+    image_ = image;
 }
 
 const vector<KeyPoint>& Keypoints::getKeypoints()
