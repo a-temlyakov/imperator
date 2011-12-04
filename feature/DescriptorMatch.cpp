@@ -9,95 +9,87 @@ DescriptorMatch::DescriptorMatch()
 DescriptorMatch::DescriptorMatch(Mat& image, const char* k_type,
                                  const char* d_type, const char* m_type)
 {
-    reference_image = image.clone();
-    matcher = DescriptorMatcher::create(m_type);
+    reference_image_ = image;
+    matcher_ = DescriptorMatcher::create(m_type);
+   
+    keypoints_ = new Keypoints(image, k_type);
+    descriptors_.setDescriptors(image, keypoints_->getKeypoints(), d_type);
     
-    vector<KeyPoint> keypoints;
-    kp_.detect(image, keypoints, k_type);
-
-    descriptors.setDescriptors(image, keypoints, d_type);
-    
-    matcher_type = m_type;
-    keypoint_type = k_type;
-    descriptor_type = d_type;
+    matcher_type_ = m_type;
+    keypoint_type_ = k_type;
+    descriptor_type_ = d_type;
 }
 
 DescriptorMatch::~DescriptorMatch()
 {
-
+    delete keypoints_;
 }
 
 void DescriptorMatch::setReferenceImage(Mat& image)
 {
-    reference_image = image.clone();
+    reference_image_ = image;
 }
 
-void DescriptorMatch::setMatcher(const char* m_type)
+void DescriptorMatch::setMatcher(const char* matcher_type)
 {
-    matcher_type = m_type;
-    matcher = DescriptorMatcher::create(m_type);
+    matcher_type_ = matcher_type;
+    matcher_ = DescriptorMatcher::create(matcher_type);
 }
 
-void DescriptorMatch::setDescriptors(const char* d_type)
+void DescriptorMatch::setDescriptors(const char* descriptor_type)
 {
-    vector<KeyPoint> keypoints;
-    kp_.getKeypoints(keypoints);
-    descriptors.setDescriptors(reference_image, 
-                               keypoints,
-                               d_type);
+    descriptor_type_ = descriptor_type;
+    descriptors_.setDescriptors(reference_image_, 
+                               keypoints_->getKeypoints(),
+                               descriptor_type);
 }
 
-Mat DescriptorMatch::getReferenceImage()
+const Mat& DescriptorMatch::getReferenceImage()
 {
-    return reference_image;
+    return reference_image_;
 }
 
-void DescriptorMatch::getKeypoints(vector<KeyPoint> keypoints)
+const vector<KeyPoint>& DescriptorMatch::getKeypoints()
 {
-    kp_.getKeypoints(keypoints);
+    return keypoints_->getKeypoints();
 }
 
-Mat DescriptorMatch::getDescriptors()
+const Mat& DescriptorMatch::getDescriptors()
 {
-    return descriptors.getDescriptors();
+    return descriptors_.getDescriptors();
 }
 
-vector<DMatch> DescriptorMatch::getMatches()
+const vector<DMatch>& DescriptorMatch::getMatches()
 {
-    return matches;
+    return matches_;
 }
 
 void DescriptorMatch::setMatches(Mat& target_image)
 {
-    vector<KeyPoint> target_keypoints;
-    Keypoints target_kp;
-    target_kp.detect(target_image, target_keypoints, keypoint_type);
+    Keypoints target_kp(target_image, keypoint_type_);
     Descriptors target_desc(target_image, 
-                            target_keypoints, 
-                            descriptor_type);
+                            target_kp.getKeypoints(), 
+                            descriptor_type_);
 
-    matcher->match(descriptors.getDescriptors(), 
+    matcher_->match(descriptors_.getDescriptors(), 
                    target_desc.getDescriptors(),
-                   matches);
+                   matches_);
 }
 
 void DescriptorMatch::displayMatches(Mat& target_image)
 {
     //to-do: hack incoming
-    vector<KeyPoint> template_keypoints, target_keypoints;
-    Keypoints target_kp;
-    target_kp.detect(target_image, target_keypoints, keypoint_type);
-    kp_.getKeypoints(template_keypoints);
+    Keypoints target_kp(target_image, keypoint_type_);
     //end hack
 
     Mat imageMatches;
-    drawMatches(reference_image,
-                    template_keypoints,
+    drawMatches(reference_image_,
+                    keypoints_->getKeypoints(),
                     target_image, //hackish
-                    target_keypoints, //very hackish
-                    matches,
+                    target_kp.getKeypoints(), //very hackish
+                    matches_,
                     imageMatches,
-                    cv::Scalar(255,255,255));
+                    cv::Scalar(0,200,0));
 
     namedWindow("Matches");
     imshow("Matches", imageMatches);
@@ -106,5 +98,5 @@ void DescriptorMatch::displayMatches(Mat& target_image)
 
 void DescriptorMatch::displayKeypoints()
 {
-    kp_.displayKeypoints();
+    keypoints_->displayKeypoints();
 }

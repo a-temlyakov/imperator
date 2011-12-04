@@ -18,15 +18,11 @@ class Keypoints{
         Keypoints(const Mat& image, const char* feature_name);
         ~Keypoints();
 
-        //setters
-        void setDetector(const char* feature_name);
-        void detect(Mat& image, 
-                    vector<KeyPoint>& keypoints, 
-                    const char* feature_name);
+        //computers
+        const vector<KeyPoint>& computeKeypoints(const char* feature_name);
 
         //getters
-        void getKeypoints(vector<KeyPoint>& keypoints);
-        int size();
+        const vector<KeyPoint>& getKeypoints();
 
         //displayers
         void displayKeypoints();

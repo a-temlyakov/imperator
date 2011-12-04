@@ -17,29 +17,17 @@ Keypoints::~Keypoints()
 
 }
 
-void Keypoints::setDetector(const char* feature_name)
+const vector<KeyPoint>& Keypoints::computeKeypoints(const char* feature_name)
 {
     detector_ = FeatureDetector::create(feature_name);
+    detector_->detect(image_, keypoints_);
+
+    return keypoints_;
 }
 
-void Keypoints::detect(Mat& image, 
-                       vector<KeyPoint>& keypoints, 
-                       const char* feature_name)
+const vector<KeyPoint>& Keypoints::getKeypoints()
 {
-    image_ = image;
-    detector_ = FeatureDetector::create(feature_name);
-    detector_->detect(image, keypoints_);
-    keypoints = keypoints_;
-}
-
-void Keypoints::getKeypoints(vector<KeyPoint>& keypoints)
-{
-    keypoints = keypoints_;
-}
-
-int Keypoints::size()
-{
-    return keypoints_.size();
+    return keypoints_;
 }
 
 void Keypoints::displayKeypoints()
