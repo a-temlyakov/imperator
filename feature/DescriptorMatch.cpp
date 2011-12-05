@@ -68,7 +68,7 @@ const vector<DMatch>& DescriptorMatch::getMatches()
     return matches_;
 }
 
-void DescriptorMatch::setMatches(const Mat& target_image)
+void DescriptorMatch::computeMatches(const Mat& target_image)
 {
     Keypoints target_kp(target_image, keypoint_type_);
     

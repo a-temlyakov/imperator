@@ -10,7 +10,7 @@ class DescriptorMatch{
         Mat reference_image_;
         Ptr<DescriptorMatcher> matcher_;
         vector<DMatch> matches_;
-        Keypoints *Keypoints_;
+        Keypoints* Keypoints_;
         Descriptors Descriptors_;
         const char* keypoint_type_;
         const char* descriptor_type_;
@@ -42,7 +42,7 @@ class DescriptorMatch{
         const Mat& getDescriptors();
         const vector<cv::DMatch>& getMatches();
 
-        void setMatches(const Mat& target_image);
+        void computeMatches(const Mat& target_image);
 
         //displayers
         void displayMatches();
