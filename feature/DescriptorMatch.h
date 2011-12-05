@@ -10,11 +10,17 @@ class DescriptorMatch{
         Mat reference_image_;
         Ptr<DescriptorMatcher> matcher_;
         vector<DMatch> matches_;
-        Keypoints *keypoints_;
-        Descriptors descriptors_;
+        Keypoints *Keypoints_;
+        Descriptors Descriptors_;
         const char* keypoint_type_;
         const char* descriptor_type_;
         const char* matcher_type_;
+
+        //super-private:
+        //these are only used to cache information about the target image
+        //currently this information is used in displayMatches()
+        Mat target_image__;
+        vector<KeyPoint> target_keypoints__;
 
     public:
         DescriptorMatch();
@@ -39,7 +45,7 @@ class DescriptorMatch{
         void setMatches(const Mat& target_image);
 
         //displayers
-        void displayMatches(const Mat& target_image);
+        void displayMatches();
         void displayKeypoints();
         
 };

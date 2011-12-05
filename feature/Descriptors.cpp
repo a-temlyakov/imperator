@@ -5,12 +5,12 @@ Descriptors::Descriptors()
 
 }
 
-Descriptors::Descriptors(const cv::Mat& image, 
-                        std::vector<cv::KeyPoint> keypoints, 
-                        const char* descriptor_name)
+Descriptors::Descriptors(const Mat& image, 
+                        vector<KeyPoint> keypoints, 
+                        const char* descriptor_type)
 {
-    extractor = cv::DescriptorExtractor::create(descriptor_name);
-    extractor->compute(image, keypoints, descriptors);
+    extractor_ = DescriptorExtractor::create(descriptor_type);
+    extractor_->compute(image, keypoints, descriptors_);
 }
 
 Descriptors::~Descriptors()
@@ -18,26 +18,26 @@ Descriptors::~Descriptors()
 
 }
 
-void Descriptors::setDescriptors(const cv::Mat& image,
-                                 std::vector<cv::KeyPoint> keypoints,
-                                 const char* descriptor_name)
+const Mat& Descriptors::computeDescriptors(const Mat& image,
+                                           vector<KeyPoint> keypoints,
+                                           const char* descriptor_type)
 {
-    extractor = cv::DescriptorExtractor::create(descriptor_name);
-    extractor->compute(image, keypoints, descriptors);
+    extractor_ = DescriptorExtractor::create(descriptor_type);
+    extractor_->compute(image, keypoints, descriptors_);
 }
 
-cv::Mat Descriptors::getDescriptors()
+const Mat& Descriptors::getDescriptors()
 {
-    return descriptors;
+    return descriptors_;
 }
 
 int Descriptors::getDescriptorSize()
 {
-    return extractor->descriptorSize();
+    return extractor_->descriptorSize();
 }   
 
 int Descriptors::getDescriptorType()
 {
-    return extractor->descriptorType();
+    return extractor_->descriptorType();
 }
 

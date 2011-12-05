@@ -16,11 +16,11 @@ class Keypoints{
 
     public:
         Keypoints();
-        Keypoints(const Mat& image, const char* feature_name);
+        Keypoints(const Mat& image, const char* feature_type);
         ~Keypoints();
 
         //computers
-        const vector<KeyPoint>& computeKeypoints(const char* feature_name);
+        const vector<KeyPoint>& computeKeypoints(const char* feature_type);
 
         //setters
         void setImage(const Mat& image);

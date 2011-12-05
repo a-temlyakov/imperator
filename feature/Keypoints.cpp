@@ -5,10 +5,10 @@ Keypoints::Keypoints()
     
 }
 
-Keypoints::Keypoints(const Mat& image, const char* feature_name)
+Keypoints::Keypoints(const Mat& image, const char* feature_type)
 {
     image_ = image;
-    detector_ = FeatureDetector::create(feature_name);
+    detector_ = FeatureDetector::create(feature_type);
     detector_->detect(image, keypoints_);
 }
 
@@ -17,7 +17,7 @@ Keypoints::~Keypoints()
 
 }
 
-const vector<KeyPoint>& Keypoints::computeKeypoints(const char* feature_name)
+const vector<KeyPoint>& Keypoints::computeKeypoints(const char* feature_type)
 {
     if(image_.empty())
     {
@@ -29,7 +29,7 @@ const vector<KeyPoint>& Keypoints::computeKeypoints(const char* feature_name)
         return keypoints_;
     }
 
-    detector_ = FeatureDetector::create(feature_name);
+    detector_ = FeatureDetector::create(feature_type);
     detector_->detect(image_, keypoints_);
 
     return keypoints_;

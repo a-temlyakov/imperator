@@ -3,21 +3,26 @@
 
 #include <opencv2/features2d/features2d.hpp>
 
+using namespace cv;
+using namespace std;
+
 class Descriptors{
     private:
-        cv::Ptr<cv::DescriptorExtractor> extractor;
-        cv::Mat descriptors;
+        Ptr<DescriptorExtractor> extractor_;
+        Mat descriptors_;
 
     public:
         Descriptors();
-        Descriptors(const cv::Mat&, std::vector<cv::KeyPoint>, const char*);
+        Descriptors(const cv::Mat& image, 
+                    vector<KeyPoint> keypoints, 
+                    const char* descriptor_type);
         ~Descriptors();
 
-        void setDescriptors(const cv::Mat&, 
+        const Mat& computeDescriptors(const cv::Mat&, 
                             std::vector<cv::KeyPoint>, 
                             const char*);
 
-        cv::Mat getDescriptors();
+        const Mat& getDescriptors();
         int getDescriptorSize();
         int getDescriptorType();
 };

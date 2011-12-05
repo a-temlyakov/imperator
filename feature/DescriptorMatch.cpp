@@ -14,9 +14,9 @@ DescriptorMatch::DescriptorMatch(const Mat& image,
     reference_image_ = image;
     matcher_ = DescriptorMatcher::create(matcher_type);
    
-    keypoints_ = new Keypoints(image, keypoint_type);
-    descriptors_.setDescriptors(image, 
-                                keypoints_->getKeypoints(), 
+    Keypoints_ = new Keypoints(image, keypoint_type);
+    Descriptors_.computeDescriptors(image, 
+                                Keypoints_->getKeypoints(), 
                                 descriptor_type);
     
     keypoint_type_ = keypoint_type;
@@ -26,7 +26,7 @@ DescriptorMatch::DescriptorMatch(const Mat& image,
 
 DescriptorMatch::~DescriptorMatch()
 {
-    delete keypoints_;
+    delete Keypoints_;
 }
 
 void DescriptorMatch::setReferenceImage(const Mat& image)
@@ -43,8 +43,8 @@ void DescriptorMatch::setMatcher(const char* matcher_type)
 void DescriptorMatch::setDescriptors(const char* descriptor_type)
 {
     descriptor_type_ = descriptor_type;
-    descriptors_.setDescriptors(reference_image_, 
-                               keypoints_->getKeypoints(),
+    Descriptors_.computeDescriptors(reference_image_, 
+                               Keypoints_->getKeypoints(),
                                descriptor_type);
 }
 
@@ -55,12 +55,12 @@ const Mat& DescriptorMatch::getReferenceImage()
 
 const vector<KeyPoint>& DescriptorMatch::getKeypoints()
 {
-    return keypoints_->getKeypoints();
+    return Keypoints_->getKeypoints();
 }
 
 const Mat& DescriptorMatch::getDescriptors()
 {
-    return descriptors_.getDescriptors();
+    return Descriptors_.getDescriptors();
 }
 
 const vector<DMatch>& DescriptorMatch::getMatches()
@@ -71,26 +71,28 @@ const vector<DMatch>& DescriptorMatch::getMatches()
 void DescriptorMatch::setMatches(const Mat& target_image)
 {
     Keypoints target_kp(target_image, keypoint_type_);
+    
+    //store the references for quick look up
+    //if displayMatches is called
+    target_image__ = target_image;
+    target_keypoints__ = target_kp.getKeypoints();
+
     Descriptors target_desc(target_image, 
-                            target_kp.getKeypoints(), 
+                            target_keypoints__, 
                             descriptor_type_);
 
-    matcher_->match(descriptors_.getDescriptors(), 
+    matcher_->match(Descriptors_.getDescriptors(), 
                    target_desc.getDescriptors(),
                    matches_);
 }
 
-void DescriptorMatch::displayMatches(const Mat& target_image)
+void DescriptorMatch::displayMatches()
 {
-    //to-do: hack incoming
-    Keypoints target_kp(target_image, keypoint_type_);
-    //end hack
-
     Mat imageMatches;
     drawMatches(reference_image_,
-                    keypoints_->getKeypoints(),
-                    target_image, //hackish
-                    target_kp.getKeypoints(), //very hackish
+                    Keypoints_->getKeypoints(),
+                    target_image__,
+                    target_keypoints__,
                     matches_,
                     imageMatches,
                     cv::Scalar(0,200,0));
@@ -102,5 +104,5 @@ void DescriptorMatch::displayMatches(const Mat& target_image)
 
 void DescriptorMatch::displayKeypoints()
 {
-    keypoints_->displayKeypoints();
+    Keypoints_->displayKeypoints();
 }
