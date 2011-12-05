@@ -48,9 +48,10 @@ void DescriptorMatch::setDescriptors(const char* descriptor_type)
                                descriptor_type);
 }
 
-const Mat& DescriptorMatch::getReferenceImage()
+void DescriptorMatch::setKeypoints(const char* keypoint_type)
 {
-    return reference_image_;
+    keypoint_type_ = keypoint_type;
+    Keypoints_->computeKeypoints(keypoint_type);
 }
 
 const vector<KeyPoint>& DescriptorMatch::getKeypoints()

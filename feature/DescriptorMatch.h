@@ -35,9 +35,9 @@ class DescriptorMatch{
         void setReferenceImage(const Mat& image);
         void setMatcher(const char* matcher_type);
         void setDescriptors(const char* descriptor_type);
-        
+        void setKeypoints(const char* keypoint_type);
+
         //getters
-        const Mat& getReferenceImage();
         const vector<KeyPoint>& getKeypoints();
         const Mat& getDescriptors();
         const vector<cv::DMatch>& getMatches();
