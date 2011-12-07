@@ -29,6 +29,24 @@ DescriptorMatch::~DescriptorMatch()
     delete Keypoints_;
 }
 
+void DescriptorMatch::computeMatches(const Mat& target_image)
+{
+    Keypoints target_kp(target_image, keypoint_type_);
+    
+    //store the references for quick look up
+    //if displayMatches is called
+    target_image__ = target_image;
+    target_keypoints__ = target_kp.getKeypoints();
+
+    Descriptors target_desc(target_image, 
+                            target_keypoints__, 
+                            descriptor_type_);
+
+    matcher_->match(Descriptors_.getDescriptors(), 
+                   target_desc.getDescriptors(),
+                   matches_);
+}
+
 void DescriptorMatch::setReferenceImage(const Mat& image)
 {
     reference_image_ = image;
@@ -54,40 +72,22 @@ void DescriptorMatch::setKeypoints(const char* keypoint_type)
     Keypoints_->computeKeypoints(keypoint_type);
 }
 
-const vector<KeyPoint>& DescriptorMatch::getKeypoints()
+const vector<KeyPoint>& DescriptorMatch::getKeypoints() const
 {
     return Keypoints_->getKeypoints();
 }
 
-const Mat& DescriptorMatch::getDescriptors()
+const Mat& DescriptorMatch::getDescriptors() const
 {
     return Descriptors_.getDescriptors();
 }
 
-const vector<DMatch>& DescriptorMatch::getMatches()
+const vector<DMatch>& DescriptorMatch::getMatches() const
 {
     return matches_;
 }
 
-void DescriptorMatch::computeMatches(const Mat& target_image)
-{
-    Keypoints target_kp(target_image, keypoint_type_);
-    
-    //store the references for quick look up
-    //if displayMatches is called
-    target_image__ = target_image;
-    target_keypoints__ = target_kp.getKeypoints();
-
-    Descriptors target_desc(target_image, 
-                            target_keypoints__, 
-                            descriptor_type_);
-
-    matcher_->match(Descriptors_.getDescriptors(), 
-                   target_desc.getDescriptors(),
-                   matches_);
-}
-
-void DescriptorMatch::displayMatches()
+void DescriptorMatch::displayMatches() const
 {
     Mat imageMatches;
     drawMatches(reference_image_,
@@ -103,7 +103,7 @@ void DescriptorMatch::displayMatches()
     waitKey(0);
 }
 
-void DescriptorMatch::displayKeypoints()
+void DescriptorMatch::displayKeypoints() const
 {
     Keypoints_->displayKeypoints();
 }

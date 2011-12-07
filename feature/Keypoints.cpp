@@ -40,12 +40,12 @@ void Keypoints::setImage(const Mat& image)
     image_ = image;
 }
 
-const vector<KeyPoint>& Keypoints::getKeypoints()
+const vector<KeyPoint>& Keypoints::getKeypoints() const
 {
     return keypoints_;
 }
 
-void Keypoints::displayKeypoints()
+void Keypoints::displayKeypoints() const
 {
     Mat keypoints_image;
     drawKeypoints(image_,

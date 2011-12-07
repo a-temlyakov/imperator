@@ -13,18 +13,18 @@ class Descriptors{
 
     public:
         Descriptors();
-        Descriptors(const cv::Mat& image, 
+        Descriptors(const Mat& image, 
                     vector<KeyPoint> keypoints, 
                     const char* descriptor_type);
         ~Descriptors();
 
-        const Mat& computeDescriptors(const cv::Mat&, 
-                            std::vector<cv::KeyPoint>, 
-                            const char*);
+        const Mat& computeDescriptors(const Mat& image, 
+                                      vector<KeyPoint> keypoints, 
+                                      const char* descriptor_type);
 
-        const Mat& getDescriptors();
-        int getDescriptorSize();
-        int getDescriptorType();
+        const Mat& getDescriptors() const;
+        int getDescriptorSize() const;
+        int getDescriptorType() const;
 };
 #endif //DESCRIPTORS_H
 

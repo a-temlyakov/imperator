@@ -26,10 +26,10 @@ class Keypoints{
         void setImage(const Mat& image);
         
         //getters
-        const vector<KeyPoint>& getKeypoints();
+        const vector<KeyPoint>& getKeypoints() const;
 
         //displayers
-        void displayKeypoints();
+        void displayKeypoints() const;
 };
 #endif //KEYPOINTS_H
 

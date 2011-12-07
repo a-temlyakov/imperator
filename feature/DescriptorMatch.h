@@ -29,8 +29,10 @@ class DescriptorMatch{
                         const char* descriptor_type, 
                         const char* matcher_type);
         ~DescriptorMatch();
-
-
+    
+        //computers
+        void computeMatches(const Mat& target_image);
+        
         //setters
         void setReferenceImage(const Mat& image);
         void setMatcher(const char* matcher_type);
@@ -38,15 +40,13 @@ class DescriptorMatch{
         void setKeypoints(const char* keypoint_type);
 
         //getters
-        const vector<KeyPoint>& getKeypoints();
-        const Mat& getDescriptors();
-        const vector<cv::DMatch>& getMatches();
-
-        void computeMatches(const Mat& target_image);
+        const vector<KeyPoint>& getKeypoints() const;
+        const Mat& getDescriptors() const;
+        const vector<cv::DMatch>& getMatches() const;
 
         //displayers
-        void displayMatches();
-        void displayKeypoints();
+        void displayMatches() const;
+        void displayKeypoints() const;
         
 };
 #endif //DESCRIPTORMATCH_H
