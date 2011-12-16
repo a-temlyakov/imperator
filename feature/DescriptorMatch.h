@@ -42,7 +42,7 @@ class DescriptorMatch{
         //getters
         const vector<KeyPoint>& getKeypoints() const;
         const Mat& getDescriptors() const;
-        const vector<cv::DMatch>& getMatches() const;
+        const vector<DMatch>& getMatches() const;
 
         //displayers
         void displayMatches() const;

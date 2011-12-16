@@ -1,13 +1,13 @@
-proj = main_svm
+proj = main
 CXX = g++
 
 CCFLAGS = -Wall `pkg-config --cflags opencv` `pkg-config --libs opencv`
 
 all: ${proj} 
 
-${proj}: ${proj}.o color/ColorMatch.o color/ColorHistogram.o feature/DescriptorMatch.o feature/Keypoints.o feature/Descriptors.o training/BagOfWords.o util/FileUtil.o io/BasicFileIO.o 
+${proj}: ${proj}.o color/ColorMatch.o color/ColorHistogram.o feature/DescriptorMatch.o feature/Keypoints.o feature/Descriptors.o training/BagOfWords.o util/FileUtil.o 
  
-	${CXX} ${CCFLAGS} -o ${proj}  ${proj}.o color/ColorMatch.o color/ColorHistogram.o feature/DescriptorMatch.o feature/Keypoints.o feature/Descriptors.o training/BagOfWords.o util/FileUtil.o io/BasicFileIO.o
+	${CXX} ${CCFLAGS} -o ${proj}  ${proj}.o color/ColorMatch.o color/ColorHistogram.o feature/DescriptorMatch.o feature/Keypoints.o feature/Descriptors.o training/BagOfWords.o util/FileUtil.o
 
 ${proj}.o: ${proj}.cpp 
 	${CXX} ${CCFLAGS} -c ${proj}.cpp
@@ -33,8 +33,5 @@ $BagOfWords.o: training/BagOfWords.cpp
 $FileUtil.o: util/FileUtil.cpp
 	${CXX} ${CCFLAGS} -c util/FileUtil.cpp
 
-$BasicFileIO.o: io/BasicFileIO.cpp
-	${CXX} ${CCFLAGS} -c io/BasicFileIO.cpp
-
 clean:
-	-rm *.o color/*.o feature/*.o training/*.o util/*.o io/*.o ${proj} 
+	-rm *.o color/*.o feature/*.o training/*.o util/*.o ${proj} 

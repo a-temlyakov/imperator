@@ -96,7 +96,7 @@ void DescriptorMatch::displayMatches() const
                     target_keypoints__,
                     matches_,
                     imageMatches,
-                    cv::Scalar(0,200,0));
+                    Scalar(0,200,0));
 
     namedWindow("Matches");
     imshow("Matches", imageMatches);

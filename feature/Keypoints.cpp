@@ -21,8 +21,8 @@ const vector<KeyPoint>& Keypoints::computeKeypoints(const char* feature_type)
 {
     if(image_.empty())
     {
-        std::cout << "Warning: Image is EMPTY\n";
-        std::cout << "No keypoints found!" << std::endl;
+        cout << "Warning: Image is EMPTY\n";
+        cout << "No keypoints found!" << endl;
         
         //return empty keypoints
         keypoints_.clear();
