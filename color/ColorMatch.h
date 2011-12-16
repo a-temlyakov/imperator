@@ -5,19 +5,17 @@
 
 class ColorMatch{
     private:
-        cv::Mat reference;
-        cv::Mat input;
-        cv::MatND refH;
-        cv::MatND inputH;
-        ColorHistogram hist;
+        MatND reference_hist_;
+        MatND target_hist_;
+        ColorHistogram hist_;
 
     public:
         ColorMatch();
         ColorMatch(int num_bins);
         ~ColorMatch();
 
-        void setReferenceImage(const cv::Mat& image);
-        double compare(const cv::Mat& target_image);
+        void setReferenceImage(const Mat& image);
+        double compare(const Mat& target_image);
 };
 #endif //COLORMATCH_H
 

@@ -5,6 +5,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+using namespace cv;
+using namespace std;
 
 class ColorHistogram{
     private:
@@ -12,19 +14,22 @@ class ColorHistogram{
         float hranges[2];
         const float* ranges[3];
         int channels[3];
+        MatND histogram_;
 
     public:
         ColorHistogram();
         ColorHistogram(int num_bins);
         ~ColorHistogram();
 
-        int getNumBins();
-        cv::MatND getHistogram(const cv::Mat& image);
-        cv::SparseMat getSparseHistogram(const cv::Mat& image);
-        
+        //setters
         void setNumBins(int num_bins);
 
-        cv::Mat equalize(const cv::Mat& image);
+        //getters
+        int getNumBins() const;
+        const MatND& getHistogram(const Mat& image);
+        SparseMat getSparseHistogram(const Mat& image);
+
+        void equalize(const Mat& image, Mat& result);
 
 };
 #endif //COLORHISTOGRAM_H
