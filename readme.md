@@ -7,15 +7,15 @@ classification.
 
 I no longer develop or maintain this code. The initial idea was to create
 simple wrappers for complex, but commonly used Computer Vision (and hence
-OpenCV) algorithms. The focus was on any easy way to obtain similarity
+OpenCV) algorithms. The intial focus was on an easy way to obtain similarity
 information between two images.
 
-The long-term idea grew to wrapping OpenCV to be used on the Linux command
-line. Obviously, I have never gotten around to achieving that goal.
+The long-term idea was write a command line interface for the most popular
+OpenCV algorithms. 
 
 I hope parts of this code are still useful as a guide to using OpenCV.
 
-## lincense
+## license
 
 Copyright 2013 Andrew Temlyakov. All rights reserved.
 
